@@ -12,6 +12,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@api/*": ["src/api/*"],
+      "@view/*": ["src/view/*"],
+      "@type": ["src/types.ts"]
+    }
   }
 }
