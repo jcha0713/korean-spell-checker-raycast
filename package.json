@@ -42,7 +42,7 @@
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
     "publish": "ray publish",
-    "test": "jest",
+    "test": "jest --verbose",
     "test:watch": "jest --watch"
   }
 }
