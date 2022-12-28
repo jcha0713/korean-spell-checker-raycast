@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Form, ActionPanel, Action, useNavigation } from "@raycast/api"
 
+import { ResultView } from "@view/result"
+
 export default function Command() {
   const { push } = useNavigation()
 
