@@ -28,7 +28,11 @@ function getFlattedErrInfos(data: CheckerResponse[]) {
 
 export default function Details({ text, data }: DetailsProps) {
   const [errInfos, setErrInfos] = useState(getFlattedErrInfos(data))
-  const resultManager = new ResultManager(text, errInfos)
+  const newText = data.reduce((text, curr): string => {
+    return text + curr.userText
+  }, "")
+
+  const resultManager = new ResultManager(newText, errInfos)
 
   function onErrInfosChange(errInfo: ErrInfo, errorIdx: number, newWord: string) {
     resultManager.updateText(errInfo, errorIdx, newWord)
@@ -40,7 +44,7 @@ export default function Details({ text, data }: DetailsProps) {
         return (
           <ListItem
             key={errInfo.errorIdx}
-            text={text}
+            text={newText}
             errInfo={errInfo}
             resultManager={resultManager}
             onErrInfosChange={onErrInfosChange}

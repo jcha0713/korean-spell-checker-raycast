@@ -12,7 +12,7 @@ export class ResultManager {
   }
 
   public updateText(errInfo: ErrInfo, errorIdx: number, newWord: string) {
-    this.updatePosition(errInfo, newWord)
+    this.updatePosition(this.errInfos[errorIdx], newWord)
 
     const newErrInfo = this.errInfos.find((errInfo) => errInfo.errorIdx === errorIdx)
 
@@ -35,7 +35,7 @@ export class ResultManager {
       }
 
       if (errInfo.start === replacedErrInfo.start) {
-        return { ...errInfo, orgStr: newWord, end: errInfo.start + lengthOffset }
+        return { ...errInfo, orgStr: newWord, end: errInfo.start + newWord.length }
       }
 
       return { ...errInfo, start: errInfo.start + lengthOffset, end: errInfo.end + lengthOffset }
