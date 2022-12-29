@@ -4,7 +4,7 @@ export class Formatter {
   public static chunkSize = 1000
 
   public static handleNewlineChars(text: string) {
-    return text.replaceAll(/([^\r])\n/g, "$1\r\n")
+    return text.replaceAll(/[\n]/g, "\r\n")
   }
 
   public static splitText(text: string): string[] {

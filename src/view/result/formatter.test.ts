@@ -3,9 +3,9 @@ import { Formatter } from "@view/result/formatter"
 describe("Formatter", () => {
   describe("tests static methods", () => {
     it("handles newline characters", () => {
-      const text = "hi\nhello\nhow\r\nare\nyou\n"
+      const text = "음\n\n안녕하세요\n\n요즘 춥네요"
       const handled = Formatter.handleNewlineChars(text)
-      expect(handled).toBe("hi\r\nhello\r\nhow\r\nare\r\nyou\r\n")
+      expect(handled).toBe("음\r\n\r\n안녕하세요\r\n\r\n요즘 춥네요")
     })
 
     it("splits large text into chunks", () => {
@@ -17,6 +17,7 @@ describe("Formatter", () => {
       }
 
       expect(largeText.length).toBe(Formatter.chunkSize * word.length)
+
       const textChunks = Formatter.splitText(largeText)
       expect(textChunks.length).toBe(word.length)
     })
