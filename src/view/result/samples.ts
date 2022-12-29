@@ -73,7 +73,7 @@ export const errInfosSamples = [
         start: 0,
         end: 9,
         orgStr: "음...안녕하세요",
-        candWords: ["음…. 안녕하세요|음. 안녕하세요"],
+        candWords: ["음…. 안녕하세요", "음. 안녕하세요"],
       },
       {
         help: "",

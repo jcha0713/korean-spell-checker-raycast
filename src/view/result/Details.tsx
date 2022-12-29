@@ -35,7 +35,7 @@ export default function Details({ text, data }: DetailsProps) {
   const resultManager = new ResultManager(newText, errInfos)
 
   function onErrInfosChange(errInfo: ErrInfo, errorIdx: number, newWord: string) {
-    resultManager.updateText(errInfo, errorIdx, newWord)
+    resultManager.updateWordList(errorIdx, newWord)
   }
 
   return (

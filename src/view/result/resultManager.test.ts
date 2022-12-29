@@ -5,13 +5,16 @@ describe("ResultManager", () => {
   errInfosSamples.forEach((sample) => {
     describe(`${sample.text}`, () => {
       const rm = new ResultManager(sample.text, sample.errInfos)
-      sample.errInfos.forEach((errInfo) => {
-        it(`update ${errInfo.orgStr}`, () => {
-          rm.updateText(errInfo, errInfo.errorIdx, errInfo.candWords[0])
-          const updatedText = rm.text.replace(errInfo.orgStr, errInfo.candWords[0])
+      let updatedText = rm.text
+      it("should update the word list", () => {
+        sample.errInfos.forEach((errInfo) => {
+          rm.updateWordList(errInfo.errorIdx, errInfo.candWords[0])
 
-          expect(rm.text).toBe(updatedText)
+          updatedText = updatedText.replace(errInfo.orgStr, errInfo.candWords[0])
         })
+
+        const result = rm.buildResult()
+        expect(result).toBe(updatedText)
       })
     })
   })

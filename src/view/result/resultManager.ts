@@ -1,46 +1,45 @@
 import { ErrInfo } from "@type"
 
 export class ResultManager {
-  public originalText: string
   public text: string
   public errInfos: ErrInfo[]
+  public wordList: { text: string; index: number }[]
 
   constructor(text: string, errInfos: ErrInfo[]) {
-    this.originalText = text
     this.text = text
     this.errInfos = errInfos
+    this.wordList = this.buildWordList()
   }
 
-  public updateText(errInfo: ErrInfo, errorIdx: number, newWord: string) {
-    this.updatePosition(this.errInfos[errorIdx], newWord)
-
-    const newErrInfo = this.errInfos.find((errInfo) => errInfo.errorIdx === errorIdx)
-
-    if (!newErrInfo) {
-      throw new Error("Unexpected error")
+  public buildResult() {
+    let result = ""
+    for (const { text } of this.wordList) {
+      result += text
     }
-
-    const updatedText =
-      this.text.substring(0, newErrInfo.start) + newWord + this.text.substring(newErrInfo.start + errInfo.orgStr.length)
-
-    this.text = updatedText
+    return result
   }
 
-  private updatePosition(replacedErrInfo: ErrInfo, newWord: string) {
-    const lengthOffset = newWord.length - replacedErrInfo.orgStr.length
-
-    const updatedErrInfos = this.errInfos.map((errInfo) => {
-      if (errInfo.start < replacedErrInfo.start) {
-        return { ...errInfo }
+  public updateWordList(errorIdx: number, newWord: string) {
+    this.wordList = this.wordList.map((word) => {
+      if (word.index === errorIdx) {
+        return { ...word, text: newWord }
       }
-
-      if (errInfo.start === replacedErrInfo.start) {
-        return { ...errInfo, orgStr: newWord, end: errInfo.start + newWord.length }
-      }
-
-      return { ...errInfo, start: errInfo.start + lengthOffset, end: errInfo.end + lengthOffset }
+      return word
     })
+  }
 
-    this.errInfos = updatedErrInfos
+  private buildWordList() {
+    let pointer = 0
+    const test = this.errInfos.flatMap((errInfo) => {
+      const nonErrorText = this.text.substring(pointer, errInfo.start)
+      const orgStr = this.text.substring(errInfo.start, errInfo.end)
+      pointer = errInfo.end
+      return [
+        { text: nonErrorText, index: -1 },
+        { text: orgStr, index: errInfo.errorIdx },
+      ]
+    })
+    test.push({ text: this.text.substring(this.errInfos[this.errInfos.length - 1].end), index: -1 })
+    return test.filter(({ text }) => text.length !== 0)
   }
 }
