@@ -15,8 +15,19 @@ export class Checker {
   private readonly PNU_SPELLER_URL = new URL("/results", "http://speller.cs.pusan.ac.kr")
   private readonly ERRINFO_REGEX = /(?<=data = )\[.*(?=;\n)/
 
-  public async parseData(data: string): Promise<CheckerResponse> {
-    const html = await parse(data)
+  public async submitText(userText: string): Promise<CheckerResponse> {
+    const formattedUserText = Formatter.handleNewlineChars(userText)
+    const formData = this.appendData(formattedUserText)
+    const { data } = await axios.post<string>(this.PNU_SPELLER_URL.toString(), formData, {
+      headers: formData.getHeaders(),
+      timeout: 10_000,
+    })
+    const parsedData = this.parseData(data)
+    return parsedData
+  }
+
+  private parseData(data: string): CheckerResponse {
+    const html = parse(data)
 
     const scriptElement = querySelector(html, 'head script:not([src^="js"])')
 
@@ -29,16 +40,6 @@ export class Checker {
     const [{ userText, errInfos }]: CheckerResponse[] = this.transformTypes(initialResponse)
 
     return { userText, errInfos }
-  }
-
-  public async submitText(userText: string): Promise<string> {
-    const formattedUserText = Formatter.handleNewlineChars(userText)
-    const formData = this.appendData(formattedUserText)
-    const { data } = await axios.post<string>(this.PNU_SPELLER_URL.toString(), formData, {
-      headers: formData.getHeaders(),
-      timeout: 10_000,
-    })
-    return data
   }
 
   private appendData(userText: string): FormData {
@@ -57,6 +58,7 @@ export class Checker {
           help: err.help,
           start: err.start,
           end: err.end,
+          // TODO: remove this comment
           // candWords: [err.orgStr, ...err.candWord.split("|")],
           candWords: [...err.candWord.split("|")],
         })
