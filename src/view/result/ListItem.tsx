@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { List, Icon, ActionPanel, Action, Keyboard } from "@raycast/api"
 import { List, Icon, ActionPanel, Action, Keyboard, showToast, Toast } from "@raycast/api"
 
 import { ErrInfo } from "@type"
@@ -59,7 +58,13 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
             <Action.CopyToClipboard title="Copy Corrected Text" content={resultManager.text} />
             <Action.CopyToClipboard title="Copy Original Text" content={resultManager.originalText} />
           </ActionPanel.Section>
-          <Action.OpenInBrowser url="http://speller.cs.pusan.ac.kr" />
+
+          <ActionPanel.Section>
+            <Action.OpenInBrowser url="http://speller.cs.pusan.ac.kr" />
+            <Action.OpenInBrowser
+              url={`https://twitter.com/intent/tweet?text=${encodeURIComponent(resultManager.text)}`}
+            />
+          </ActionPanel.Section>
         </ActionPanel>
       }
       detail={<List.Item.Detail markdown={markdown}></List.Item.Detail>}
