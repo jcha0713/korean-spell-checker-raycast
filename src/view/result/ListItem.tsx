@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { List, Icon, ActionPanel, Action, Keyboard } from "@raycast/api"
+import { List, Icon, ActionPanel, Action, Keyboard, showToast, Toast } from "@raycast/api"
 
 import { ErrInfo } from "@type"
 import { Formatter, ResultManager } from "@view/result"
@@ -15,9 +16,15 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
   const formatter = new Formatter(text)
   const [markdown, setMarkdown] = useState(formatter.formatText(text, errInfo))
 
-  function set(errorIdx: number, newWord: string) {
+  async function set(errorIdx: number, newWord: string) {
     setMarkdown(formatter.formatText(text, errInfo, newWord))
     onErrInfosChange(errInfo, errorIdx, newWord)
+
+    await showToast({
+      style: Toast.Style.Success,
+      title: `New Word Selected`,
+      message: `${errInfo.orgStr} -> ${newWord}`,
+    })
   }
 
   return (
@@ -36,19 +43,18 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
           <ActionPanel.Section>
             <Action
               title={`Select ${errInfo.orgStr}`}
-              onAction={() => set(errInfo.errorIdx, errInfo.orgStr)}
+              onAction={async () => set(errInfo.errorIdx, errInfo.orgStr)}
               shortcut={{ modifiers: ["ctrl"], key: (0).toString() as Keyboard.KeyEquivalent }}
             />
             {errInfo.candWords.map((word, idx) => (
               <Action
                 key={word}
                 title={`Select ${word}`}
-                onAction={() => set(errInfo.errorIdx, word)}
+                onAction={async () => set(errInfo.errorIdx, word)}
                 shortcut={{ modifiers: ["ctrl"], key: (idx + 1).toString() as Keyboard.KeyEquivalent }}
               />
             ))}
           </ActionPanel.Section>
-
           <ActionPanel.Section>
             <Action.CopyToClipboard title="Copy Corrected Text" content={resultManager.text} />
             <Action.CopyToClipboard title="Copy Original Text" content={resultManager.originalText} />

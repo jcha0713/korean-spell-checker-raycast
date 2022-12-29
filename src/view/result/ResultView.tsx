@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { AxiosError } from "axios"
-import { List } from "@raycast/api"
+import { List, showToast, Toast } from "@raycast/api"
 import { usePromise } from "@raycast/utils"
 
 import { CheckerResponse } from "@type"
@@ -11,12 +11,15 @@ import { Details, Formatter } from "@view/result"
 
 async function getResultFromChunks(chunks: string[]): Promise<CheckerResponse[] | AxiosError> {
   try {
+    await showToast({
+      style: Toast.Style.Animated,
+      title: "fetching...",
+    })
     const data = await Promise.all(
       chunks.map(async (chunk) => {
         const checker = new Checker()
         const response = await checker.submitText(chunk)
-        const parsed = await checker.parseData(response)
-        return parsed
+        return response
       })
     )
     return data
@@ -31,7 +34,21 @@ export default function ResultView({ text }: { text: string }) {
     return Formatter.splitText(text)
   }, [text])
 
-  const { isLoading, data } = usePromise(getResultFromChunks, [textChunks])
+  const { isLoading, data } = usePromise(getResultFromChunks, [textChunks], {
+    onData: async (data) => {
+      if (data instanceof AxiosError) {
+        await showToast({
+          style: Toast.Style.Failure,
+          title: "Error",
+        })
+      } else {
+        await showToast({
+          style: Toast.Style.Success,
+          title: "Success!",
+        })
+      }
+    },
+  })
 
   if (data instanceof AxiosError) {
     return <ErrorView errorCode={data.code} />
