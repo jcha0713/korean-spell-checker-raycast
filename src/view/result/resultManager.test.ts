@@ -1,24 +1,18 @@
-import { Formatter } from "@view/result/formatter"
+import { ResultManager } from "@view/result/resultManager"
+import { errInfosSamples } from "./samples"
 
-describe("Formatter", () => {
-  describe("tests static methods", () => {
-    it("handles newline characters", () => {
-      const text = "hi\nhello\nhow\r\nare\nyou\n"
-      const handled = Formatter.handleNewlineChars(text)
-      expect(handled).toBe("hi\r\nhello\r\nhow\r\nare\r\nyou\r\n")
-    })
+describe("ResultManager", () => {
+  errInfosSamples.forEach((sample) => {
+    describe(`${sample.text}`, () => {
+      const rm = new ResultManager(sample.text, sample.errInfos)
+      sample.errInfos.forEach((errInfo) => {
+        it(`update ${errInfo.orgStr}`, () => {
+          rm.updateText(errInfo, errInfo.errorIdx, errInfo.candWords[0])
+          const updatedText = rm.text.replace(errInfo.orgStr, errInfo.candWords[0])
 
-    it("splits large text into chunks", () => {
-      let largeText = ""
-      const word = "large"
-
-      for (let i = 0; i < Formatter.chunkSize; i++) {
-        largeText += word
-      }
-
-      expect(largeText.length).toBe(Formatter.chunkSize * word.length)
-      const textChunks = Formatter.splitText(largeText)
-      expect(textChunks.length).toBe(word.length)
+          expect(rm.text).toBe(updatedText)
+        })
+      })
     })
   })
 })
