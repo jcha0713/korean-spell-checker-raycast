@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Form, ActionPanel, Action, useNavigation } from "@raycast/api"
+import { useState, useEffect } from "react"
+import { Form, ActionPanel, Action, useNavigation, getSelectedText } from "@raycast/api"
 
 import { ResultView } from "@view/result"
 
@@ -9,6 +9,22 @@ export default function Command() {
   const [text, setText] = useState("")
   const [charCount, setCharCount] = useState("0")
   const [textAreaError, setTextAreaError] = useState<string | undefined>()
+
+  useEffect(() => {
+    const setSelectedText = async () => {
+      let selectedText
+      try {
+        selectedText = await getSelectedText()
+      } catch (_error) {
+        return
+      }
+      if (!selectedText) {
+        return
+      }
+      handleChange(selectedText)
+    }
+    setSelectedText()
+  }, [])
 
   function submitText(text: string) {
     if (text.length > 0) {
