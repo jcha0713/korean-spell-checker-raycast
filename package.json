@@ -3,7 +3,7 @@
   "name": "korean-spell-checker",
   "title": "Korean Spell Checker",
   "description": "It provides grammar/spelling suggestions for Korean",
-  "icon": "command-icon.png",
+  "icon": "speller-logo.png",
   "author": "jcha0713",
   "license": "MIT",
   "commands": [
