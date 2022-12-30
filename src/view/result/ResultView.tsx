@@ -55,7 +55,11 @@ export default function ResultView({ text }: { text: string }) {
   }
 
   return (
-    <List isLoading={isLoading} isShowingDetail={data && data[0].errInfos.length > 0}>
+    <List
+      isLoading={isLoading}
+      isShowingDetail={data && data[0].errInfos.length > 0}
+      searchBarPlaceholder="Search for a keyword..."
+    >
       {data && (data[0].errInfos.length === 0 ? <NoErrorView text={text} /> : <Details data={data} />)}
     </List>
   )
