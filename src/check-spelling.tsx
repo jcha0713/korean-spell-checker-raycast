@@ -10,8 +10,6 @@ interface RootProps {
 }
 
 export default function CheckSpellingRoot(props: RootProps) {
-  const { push } = useNavigation()
-
   const draftText = props.draftValues?.text
   const [text, setText] = useState(draftText || "")
   const [charCount, setCharCount] = useState("0")
@@ -23,19 +21,25 @@ export default function CheckSpellingRoot(props: RootProps) {
     }
 
     const setSelectedText = async () => {
-      let selectedText
+      let selectedText = ""
+
       try {
         selectedText = await getSelectedText()
       } catch (_error) {
         return
       }
+
       if (!selectedText) {
         return
       }
+
       handleChange(selectedText)
     }
+
     setSelectedText()
   }, [])
+
+  const { push } = useNavigation()
 
   function submitText(text: string) {
     if (text.length > 0) {
@@ -48,6 +52,7 @@ export default function CheckSpellingRoot(props: RootProps) {
   function handleChange(text: string) {
     setText(text)
     setCharCount(text.length.toString())
+
     if (text.length > 0) {
       setTextAreaError(undefined)
     }

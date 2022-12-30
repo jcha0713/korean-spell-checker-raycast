@@ -10,16 +10,16 @@ interface ListItemProps {
   text: string
   errInfo: ErrInfo
   resultManager: ResultManager
-  onErrInfosChange: (errorIdx: number, newWord: string) => void
 }
 
-export default function ListItem({ text, errInfo, resultManager, onErrInfosChange }: ListItemProps) {
+export default function ListItem({ text, errInfo, resultManager }: ListItemProps) {
   const formatter = new Formatter(text)
   const [markdown, setMarkdown] = useState(formatter.formatText(text, errInfo))
 
   async function setNewWord(errorIdx: number, newWord: string) {
     setMarkdown(formatter.formatText(text, errInfo, newWord))
-    onErrInfosChange(errorIdx, newWord)
+
+    resultManager.updateWordList(errorIdx, newWord)
 
     const toastMessage = newWord === errInfo.orgStr ? "Word Unselected" : "New Word Selected"
 

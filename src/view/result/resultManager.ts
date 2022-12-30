@@ -3,7 +3,7 @@ import { ErrInfo } from "@type"
 export class ResultManager {
   public text: string
   public errInfos: ErrInfo[]
-  public wordList: { text: string; index: number }[]
+  private wordList: { text: string; index: number }[]
 
   constructor(text: string, errInfos: ErrInfo[]) {
     this.text = text
@@ -13,9 +13,11 @@ export class ResultManager {
 
   public buildResult() {
     let result = ""
+
     for (const { text } of this.wordList) {
       result += text
     }
+
     return result
   }
 
@@ -30,16 +32,18 @@ export class ResultManager {
 
   private buildWordList() {
     let pointer = 0
-    const test = this.errInfos.flatMap((errInfo) => {
+    const wordList = this.errInfos.flatMap((errInfo) => {
       const nonErrorText = this.text.substring(pointer, errInfo.start)
       const orgStr = this.text.substring(errInfo.start, errInfo.end)
       pointer = errInfo.end
+
       return [
         { text: nonErrorText, index: -1 },
         { text: orgStr, index: errInfo.errorIdx },
       ]
     })
-    test.push({ text: this.text.substring(this.errInfos[this.errInfos.length - 1].end), index: -1 })
-    return test.filter(({ text }) => text.length !== 0)
+
+    wordList.push({ text: this.text.substring(this.errInfos[this.errInfos.length - 1].end), index: -1 })
+    return wordList.filter(({ text }) => text.length !== 0)
   }
 }

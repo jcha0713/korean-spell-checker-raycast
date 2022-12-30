@@ -29,7 +29,7 @@ export class Formatter {
 ${this.shouldAddDots(text)}${inlineCodeAdded.substring(errInfo.start - 60, errInfo.end + 60)}${this.shouldAddDots(text)}
 
 \`\`\`
-${this.suggestWords(errInfo, newWord)}
+${this.suggestedWords(errInfo, newWord)}
 \`\`\`
 
 ---
@@ -38,7 +38,7 @@ ${this.formatHelpString(errInfo.help)}
 `
   }
 
-  private suggestWords(errInfo: ErrInfo, newWord: string) {
+  private suggestedWords(errInfo: ErrInfo, newWord: string) {
     const choices = errInfo.candWords.map((choice) => {
       if (choice === newWord) {
         return `${choice} [selected]`
@@ -53,15 +53,16 @@ ${this.formatHelpString(errInfo.help)}
       return help
     }
 
-    function replacer(match: string, p1: string): string {
-      // console.log(p1)
+    function replacer(match: string): string {
       const linesInExamples = match
         .replace("(예)", "")
         .split(/\([○XO×ox]\)/)
         .slice(0, -1)
+
       const formattedExamples = linesInExamples.map(
         (line, index) => line.replace("->", "").trim() + (index % 2 === 0 ? "(X)" : "(O)\n")
       )
+
       return `
 \`\`\`
 예:

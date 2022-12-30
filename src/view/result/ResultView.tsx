@@ -15,6 +15,7 @@ async function getResultFromChunks(chunks: string[]): Promise<CheckerResponse[] 
       style: Toast.Style.Animated,
       title: "fetching...",
     })
+
     const data = await Promise.all(
       chunks.map(async (chunk) => {
         const checker = new Checker()
@@ -22,6 +23,7 @@ async function getResultFromChunks(chunks: string[]): Promise<CheckerResponse[] 
         return response
       })
     )
+
     return data
   } catch (e) {
     const error = e as AxiosError
