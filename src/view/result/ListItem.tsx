@@ -60,7 +60,11 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
           </ActionPanel.Submenu>
           <ActionPanel.Section>
             <ResultAction title="Copy Corrected Text" actionType={"COPY"} resultManager={resultManager} />
-            <Action.CopyToClipboard title="Copy Original Text" content={resultManager.text} />
+            <Action.CopyToClipboard
+              title="Copy Original Text"
+              content={resultManager.text}
+              shortcut={{ modifiers: ["shift"], key: "c" }}
+            />
           </ActionPanel.Section>
 
           <ActionPanel.Section>

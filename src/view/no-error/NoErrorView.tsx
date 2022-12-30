@@ -15,7 +15,7 @@ export default function NoErrorView({ text }: NoErrorViewProps) {
           <Action.CopyToClipboard
             title="Copy Original Text"
             content={text}
-            shortcut={{ modifiers: ["ctrl"], key: "c" }}
+            shortcut={{ modifiers: ["shift"], key: "c" }}
           />
 
           <Action.OpenInBrowser
