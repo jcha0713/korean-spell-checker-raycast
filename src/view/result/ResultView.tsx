@@ -56,7 +56,7 @@ export default function ResultView({ text }: { text: string }) {
 
   return (
     <List isLoading={isLoading} isShowingDetail={data && data[0].errInfos.length > 0}>
-      {data && (data[0].errInfos.length === 0 ? <NoErrorView /> : <Details data={data} />)}
+      {data && (data[0].errInfos.length === 0 ? <NoErrorView text={text} /> : <Details data={data} />)}
     </List>
   )
 }
