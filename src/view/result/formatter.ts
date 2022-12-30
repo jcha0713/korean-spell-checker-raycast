@@ -1,7 +1,6 @@
 import { ErrInfo } from "@type"
 
 export class Formatter {
-  public static chunkSize = 1000
 
   public static handleNewlineChars(text: string) {
     return text.replaceAll(/[\n]/g, "\r\n")
@@ -39,12 +38,13 @@ ${this.formatHelpString(errInfo.help)}
   }
 
   private suggestWords(errInfo: ErrInfo, newWord: string) {
-    let choices = errInfo.candWords.join(" | ")
-    const selectedWord = errInfo.candWords.find((word) => word === newWord)
-    if (selectedWord) {
-      choices = choices.replace(selectedWord, `${selectedWord} [selected]`)
-    }
-    return `${errInfo.orgStr} -> ${choices}`
+    const choices = errInfo.candWords.map((choice) => {
+      if (choice === newWord) {
+        return `${choice} [selected]`
+      }
+      return choice
+    })
+    return `${errInfo.orgStr} -> ${choices.join(" | ")}`
   }
 
   // TODO: 예가 중간에 나오는 경우 처리하기
