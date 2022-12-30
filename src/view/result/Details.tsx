@@ -1,11 +1,9 @@
-import { useState } from "react"
+import { useMemo } from "react"
 
 import { CheckerResponse } from "@type"
 import { ListItem, Formatter, ResultManager } from "@view/result"
-import { ErrInfo } from "@type"
 
 interface DetailsProps {
-  text: string
   data: CheckerResponse[]
 }
 
@@ -26,15 +24,18 @@ function getFlattedErrInfos(data: CheckerResponse[]) {
   return flattedErrInfos
 }
 
-export default function Details({ text, data }: DetailsProps) {
-  const [errInfos, setErrInfos] = useState(getFlattedErrInfos(data))
+export default function Details({ data }: DetailsProps) {
+  const errInfos = useMemo(() => {
+    return getFlattedErrInfos(data)
+  }, [data])
+
   const newText = data.reduce((text, curr): string => {
     return text + curr.userText
   }, "")
 
   const resultManager = new ResultManager(newText, errInfos)
 
-  function onErrInfosChange(errInfo: ErrInfo, errorIdx: number, newWord: string) {
+  function onErrInfosChange(errorIdx: number, newWord: string) {
     resultManager.updateWordList(errorIdx, newWord)
   }
 

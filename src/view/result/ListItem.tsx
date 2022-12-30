@@ -9,7 +9,7 @@ interface ListItemProps {
   text: string
   errInfo: ErrInfo
   resultManager: ResultManager
-  onErrInfosChange: (errInfo: ErrInfo, errorIdx: number, newWord: string) => void
+  onErrInfosChange: (errorIdx: number, newWord: string) => void
 }
 
 export default function ListItem({ text, errInfo, resultManager, onErrInfosChange }: ListItemProps) {
@@ -18,7 +18,7 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
 
   async function set(errorIdx: number, newWord: string) {
     setMarkdown(formatter.formatText(text, errInfo, newWord))
-    onErrInfosChange(errInfo, errorIdx, newWord)
+    onErrInfosChange(errorIdx, newWord)
 
     await showToast({
       style: Toast.Style.Success,
