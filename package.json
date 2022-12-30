@@ -9,7 +9,7 @@
   "commands": [
     {
       "name": "check-spelling",
-      "title": "check-spelling",
+      "title": "Check Korean Spelling",
       "description": "Check spelling errors in a given text",
       "mode": "view"
     }
