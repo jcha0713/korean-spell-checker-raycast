@@ -3,14 +3,25 @@ import { Form, ActionPanel, Action, useNavigation, getSelectedText } from "@rayc
 
 import { ResultView } from "@view/result"
 
-export default function Command() {
+interface RootProps {
+  draftValues: {
+    text: string
+  }
+}
+
+export default function CheckSpellingRoot(props: RootProps) {
   const { push } = useNavigation()
 
-  const [text, setText] = useState("")
+  const draftText = props.draftValues?.text
+  const [text, setText] = useState(draftText || "")
   const [charCount, setCharCount] = useState("0")
   const [textAreaError, setTextAreaError] = useState<string | undefined>()
 
   useEffect(() => {
+    if (text) {
+      return
+    }
+
     const setSelectedText = async () => {
       let selectedText
       try {
@@ -48,7 +59,7 @@ export default function Command() {
       actions={
         <ActionPanel>
           <Action.SubmitForm
-            title="Submit text"
+            title="Submit Text"
             onSubmit={({ text }) => {
               submitText(text)
             }}
