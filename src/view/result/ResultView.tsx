@@ -34,7 +34,7 @@ export default function ResultView({ text }: { text: string }) {
     return Formatter.splitText(text)
   }, [text])
 
-  const { isLoading, data } = usePromise(getResultFromChunks, [textChunks], {
+  const { isLoading, data, revalidate } = usePromise(getResultFromChunks, [textChunks], {
     onData: async (data) => {
       if (data instanceof AxiosError) {
         await showToast({
@@ -51,12 +51,12 @@ export default function ResultView({ text }: { text: string }) {
   })
 
   if (data instanceof AxiosError) {
-    return <ErrorView errorCode={data.code} />
+    return <ErrorView errorCode={data.code} revalidate={revalidate} />
   }
 
   return (
     <List isLoading={isLoading} isShowingDetail={data && data[0].errInfos.length > 0}>
-      {data && (data[0].errInfos.length === 0 ? <NoErrorView /> : <Details text={text} data={data} />)}
+      {data && (data[0].errInfos.length === 0 ? <NoErrorView /> : <Details data={data} />)}
     </List>
   )
 }

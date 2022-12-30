@@ -1,4 +1,7 @@
-import { List, Icon } from "@raycast/api"
+import { AxiosError } from "axios"
+import { List, Icon, Action, ActionPanel } from "@raycast/api"
+
+import { CheckerResponse } from "@type"
 
 type ErrorCode = "ECONNABORTED" | "ERR_BAD_RESPONSE" | "ECONNRESET" | "ENETDOWN"
 
@@ -26,21 +29,24 @@ function getErrorMessage(errorCode: string | undefined) {
     },
   }
 
-  if (!errorCode) {
+  const { title, description } = errorMessage[errorCode as ErrorCode]
+
+  if (!title || !description) {
     return {
       title: "Unexpected Error",
       description: "Unexpected error has occured. Please try again in a few minutes.",
     }
   }
 
-  const { title, description } = errorMessage[errorCode as ErrorCode]
-
   return { title, description }
 }
 
-export default function ErrorView({ errorCode }: { errorCode: string | undefined }) {
-  // TODO: Remove this cl
-  console.log(errorCode)
+interface ErrorViewProps {
+  errorCode: string | undefined
+  revalidate: () => Promise<CheckerResponse[] | AxiosError<unknown, any>>
+}
+
+export default function ErrorView({ errorCode, revalidate }: ErrorViewProps) {
   const { title, description } = getErrorMessage(errorCode)
 
   return (
@@ -52,6 +58,11 @@ export default function ErrorView({ errorCode }: { errorCode: string | undefined
           source: Icon.ExclamationMark,
           tintColor: { light: "#f9645a", dark: "#71262c", adjustContrast: true },
         }}
+        actions={
+          <ActionPanel>
+            <Action title="Try Again " onAction={revalidate} />
+          </ActionPanel>
+        }
       />
     </List>
   )
