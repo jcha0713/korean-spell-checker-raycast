@@ -5,6 +5,10 @@
   "description": "It provides grammar/spelling suggestions for Korean",
   "icon": "speller-logo.png",
   "author": "jcha0713",
+  "categories": [
+    "Productivity",
+    "Other"
+  ],
   "license": "MIT",
   "commands": [
     {
