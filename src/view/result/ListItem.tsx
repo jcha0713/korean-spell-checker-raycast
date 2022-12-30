@@ -4,6 +4,7 @@ import { List, Icon, ActionPanel, Action, Keyboard, showToast, Toast } from "@ra
 import { ErrInfo } from "@type"
 import ResultAction from "@view/result/ui/ResultAction"
 import { Formatter, ResultManager } from "@view/result"
+import { getFavicon } from "@raycast/utils"
 
 interface ListItemProps {
   text: string
@@ -16,20 +17,22 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
   const formatter = new Formatter(text)
   const [markdown, setMarkdown] = useState(formatter.formatText(text, errInfo))
 
-  async function set(errorIdx: number, newWord: string) {
+  async function setNewWord(errorIdx: number, newWord: string) {
     setMarkdown(formatter.formatText(text, errInfo, newWord))
     onErrInfosChange(errorIdx, newWord)
 
+    const toastMessage = newWord === errInfo.orgStr ? "Word Unselected" : "New Word Selected"
+
     await showToast({
       style: Toast.Style.Success,
-      title: `New Word Selected`,
+      title: toastMessage,
       message: `${errInfo.orgStr} -> ${newWord}`,
     })
   }
 
   return (
     <List.Item
-      title={`${errInfo.orgStr}`}
+      title={errInfo.orgStr}
       icon={{
         source: Icon.Warning,
         tintColor: {
@@ -41,22 +44,22 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
       actions={
         <ActionPanel title={`Edit ${errInfo.orgStr}`}>
           <ActionPanel.Section>
-            <Action
-              title={`Select ${errInfo.orgStr}`}
-              onAction={async () => set(errInfo.errorIdx, errInfo.orgStr)}
-              shortcut={{ modifiers: ["ctrl"], key: (0).toString() as Keyboard.KeyEquivalent }}
-            />
             {errInfo.candWords.map((word, idx) => (
               <Action
                 key={word}
                 title={`Select ${word}`}
-                onAction={async () => set(errInfo.errorIdx, word)}
+                onAction={async () => setNewWord(errInfo.errorIdx, word)}
                 shortcut={{ modifiers: ["ctrl"], key: (idx + 1).toString() as Keyboard.KeyEquivalent }}
               />
             ))}
+            <Action
+              title={`Select ${errInfo.orgStr}`}
+              onAction={async () => setNewWord(errInfo.errorIdx, errInfo.orgStr)}
+              shortcut={{ modifiers: ["ctrl"], key: (0).toString() as Keyboard.KeyEquivalent }}
+            />
           </ActionPanel.Section>
           <ActionPanel.Section>
-            <ResultAction title="Copy Final Result" actionType={"COPY"} resultManager={resultManager} />
+            <ResultAction title="Copy Corrected Text" actionType={"COPY"} resultManager={resultManager} />
             <Action.CopyToClipboard title="Copy Original Text" content={resultManager.text} />
           </ActionPanel.Section>
 
@@ -69,7 +72,7 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
             />
             <Action.OpenInBrowser
               title="Open Original Website"
-              icon="speller-logo.png"
+              icon={getFavicon("http://speller.cs.pusan.ac.kr/")}
               url={"http://speller.cs.pusan.ac.kr/"}
             />
           </ActionPanel.Section>

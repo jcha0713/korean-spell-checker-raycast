@@ -1,7 +1,7 @@
 import { Action, Clipboard, Icon, Toast, open, showHUD, showToast } from "@raycast/api"
 
-import { ResultManager } from "@view/result"
 import { UserActions, ActionType } from "@type"
+import { ResultManager } from "@view/result"
 
 interface ResultActionProps {
   title: string

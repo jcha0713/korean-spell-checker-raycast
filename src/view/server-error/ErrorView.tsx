@@ -60,7 +60,7 @@ export default function ErrorView({ errorCode, revalidate }: ErrorViewProps) {
         }}
         actions={
           <ActionPanel>
-            <Action title="Try Again " onAction={revalidate} />
+            <Action title="Try Again" onAction={revalidate} />
           </ActionPanel>
         }
       />
