@@ -42,8 +42,8 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
         },
       }}
       actions={
-        <ActionPanel title={`Edit ${errInfo.orgStr}`}>
-          <ActionPanel.Section>
+        <ActionPanel>
+          <ActionPanel.Submenu title={`Edit ${errInfo.orgStr}`}>
             {errInfo.candWords.map((word, idx) => (
               <Action
                 key={word}
@@ -57,7 +57,7 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
               onAction={async () => setNewWord(errInfo.errorIdx, errInfo.orgStr)}
               shortcut={{ modifiers: ["ctrl"], key: (0).toString() as Keyboard.KeyEquivalent }}
             />
-          </ActionPanel.Section>
+          </ActionPanel.Submenu>
           <ActionPanel.Section>
             <ResultAction title="Copy Corrected Text" actionType={"COPY"} resultManager={resultManager} />
             <Action.CopyToClipboard title="Copy Original Text" content={resultManager.text} />
