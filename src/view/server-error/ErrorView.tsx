@@ -4,9 +4,16 @@ import { getFavicon } from "@raycast/utils"
 
 import { CheckerResponse } from "@type"
 
-type ErrorCode = "ECONNABORTED" | "ERR_BAD_RESPONSE" | "ECONNRESET" | "ENETDOWN"
+type ErrorCode = "ECONNABORTED" | "ERR_BAD_RESPONSE" | "ECONNRESET" | "ENETDOWN" | "ENOTFOUND"
 
 function getErrorMessage(errorCode: string | undefined) {
+  if (!errorCode) {
+    return {
+      title: "Unexpected Error",
+      description: "Unexpected error has occured. Please try again in a few minutes.",
+    }
+  }
+
   const errorMessage: Record<ErrorCode, { title: string; description: string }> = {
     ECONNABORTED: {
       title: "Request Timeout",
@@ -28,15 +35,16 @@ function getErrorMessage(errorCode: string | undefined) {
       description:
         "The server did not provide a valid response. This happens when server is not responsive. Please try again later.",
     },
+    ENOTFOUND: {
+      title: "Oops, we can't seem to connect right now",
+      description:
+        "It looks like your internet connection might be down. Please check your internet connection and try again.",
+    },
   }
 
-  const { title, description } = errorMessage[errorCode as ErrorCode]
-
-  if (!title || !description) {
-    return {
-      title: "Unexpected Error",
-      description: "Unexpected error has occured. Please try again in a few minutes.",
-    }
+  const { title, description } = errorMessage[errorCode as ErrorCode] || {
+    title: "Unexpected Error",
+    description: "Unexpected error has occured. Please try again in a few minutes.",
   }
 
   return { title, description }
