@@ -1,3 +1,5 @@
-# korean-spell-checker Changelog
+# Korean Spell Checker Changelog
 
-## [Initial Version] - 2022-12-24
+## [Added Korean Spell Checker] - 2022-12-30
+
+Initial version
