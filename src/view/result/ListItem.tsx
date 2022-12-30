@@ -55,7 +55,7 @@ export default function ListItem({ text, errInfo, resultManager }: ListItemProps
             <Action
               title={`Select ${errInfo.orgStr}`}
               onAction={async () => setNewWord(errInfo.errorIdx, errInfo.orgStr)}
-              shortcut={{ modifiers: ["ctrl"], key: (0).toString() as Keyboard.KeyEquivalent }}
+              shortcut={{ modifiers: ["ctrl"], key: "0" }}
             />
           </ActionPanel.Submenu>
           <ActionPanel.Section>
