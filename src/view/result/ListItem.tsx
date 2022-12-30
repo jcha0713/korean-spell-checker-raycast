@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { List, Icon, ActionPanel, Action, Keyboard, showToast, Toast } from "@raycast/api"
+import { getFavicon } from "@raycast/utils"
 
 import { ErrInfo } from "@type"
 import ResultAction from "@view/result/ui/ResultAction"
 import { Formatter, ResultManager } from "@view/result"
-import { getFavicon } from "@raycast/utils"
 
 interface ListItemProps {
   text: string

@@ -1,5 +1,6 @@
 import { AxiosError } from "axios"
 import { List, Icon, Action, ActionPanel } from "@raycast/api"
+import { getFavicon } from "@raycast/utils"
 
 import { CheckerResponse } from "@type"
 
@@ -61,6 +62,12 @@ export default function ErrorView({ errorCode, revalidate }: ErrorViewProps) {
         actions={
           <ActionPanel>
             <Action title="Try Again" onAction={revalidate} />
+
+            <Action.OpenInBrowser
+              title="Open Original Website"
+              icon={getFavicon("http://speller.cs.pusan.ac.kr/")}
+              url={"http://speller.cs.pusan.ac.kr/"}
+            />
           </ActionPanel>
         }
       />
