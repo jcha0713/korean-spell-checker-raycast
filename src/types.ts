@@ -11,3 +11,10 @@ export interface CheckerResponse {
   userText: string
   errInfos: ErrInfo[]
 }
+
+export interface UserActions {
+  COPY: (content: string) => Promise<void>
+  TWITTER: (url: string) => Promise<void>
+}
+
+export type ActionType = keyof UserActions

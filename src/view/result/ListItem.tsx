@@ -2,6 +2,7 @@ import { useState } from "react"
 import { List, Icon, ActionPanel, Action, Keyboard, showToast, Toast } from "@raycast/api"
 
 import { ErrInfo } from "@type"
+import ResultAction from "@view/result/ui/ResultAction"
 import { Formatter, ResultManager } from "@view/result"
 
 interface ListItemProps {
@@ -55,14 +56,21 @@ export default function ListItem({ text, errInfo, resultManager, onErrInfosChang
             ))}
           </ActionPanel.Section>
           <ActionPanel.Section>
-            <Action.CopyToClipboard title="Copy Corrected Text" content={resultManager.text} />
-            <Action.CopyToClipboard title="Copy Original Text" content={resultManager.originalText} />
+            <ResultAction title="Copy Final Result" actionType={"COPY"} resultManager={resultManager} />
+            <Action.CopyToClipboard title="Copy Original Text" content={resultManager.text} />
           </ActionPanel.Section>
 
           <ActionPanel.Section>
-            <Action.OpenInBrowser url="http://speller.cs.pusan.ac.kr" />
+            <ResultAction
+              title="Open in Twitter"
+              actionType={"TWITTER"}
+              resultManager={resultManager}
+              url={"https://twitter.com/intent/tweet?text="}
+            />
             <Action.OpenInBrowser
-              url={`https://twitter.com/intent/tweet?text=${encodeURIComponent(resultManager.text)}`}
+              title="Open Original Website"
+              icon="speller-logo.png"
+              url={"http://speller.cs.pusan.ac.kr/"}
             />
           </ActionPanel.Section>
         </ActionPanel>
