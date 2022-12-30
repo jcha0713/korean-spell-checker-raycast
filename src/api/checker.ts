@@ -58,8 +58,6 @@ export class Checker {
           help: err.help,
           start: err.start,
           end: err.end,
-          // TODO: remove this comment
-          // candWords: [err.orgStr, ...err.candWord.split("|")],
           candWords: [...err.candWord.split("|")],
         })
       ),

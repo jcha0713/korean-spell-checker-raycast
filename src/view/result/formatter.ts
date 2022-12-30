@@ -1,9 +1,10 @@
 import { ErrInfo } from "@type"
 
 export class Formatter {
+  public static readonly chunkSize = 1000
 
   public static handleNewlineChars(text: string) {
-    return text.replaceAll(/[\n]/g, "\r\n")
+    return text.replaceAll(/\n/g, "\r\n")
   }
 
   public static splitText(text: string): string[] {
@@ -47,35 +48,31 @@ ${this.formatHelpString(errInfo.help)}
     return `${errInfo.orgStr} -> ${choices.join(" | ")}`
   }
 
-  // TODO: 예가 중간에 나오는 경우 처리하기
   private formatHelpString(help: string) {
     if (!help.includes("(예)")) {
       return help
     }
 
-    const lastMatch = help.lastIndexOf("(예)")
-    const match = help.substring(lastMatch).match(/(\(예\).+)\([○XO×ox]\)/)?.[0]
-
-    if (!match) {
-      return help
-    }
-
-    const linesInExamples = match
-      .replace("(예)", "")
-      .split(/\([○XO×ox]\)/)
-      .slice(0, -1)
-    const formattedLines = linesInExamples.map(
-      (line, index) => line.replace("->", "").trim() + (index % 2 === 0 ? "(X)" : "(O)\n")
-    )
-    const formattedHelpString = `
-${help.replace(match, "")}
-
+    function replacer(match: string, p1: string): string {
+      // console.log(p1)
+      const linesInExamples = match
+        .replace("(예)", "")
+        .split(/\([○XO×ox]\)/)
+        .slice(0, -1)
+      const formattedExamples = linesInExamples.map(
+        (line, index) => line.replace("->", "").trim() + (index % 2 === 0 ? "(X)" : "(O)\n")
+      )
+      return `
 \`\`\`
-(예)
+예:
 
-${formattedLines.join("\r\n")}
+${formattedExamples.join("\r\n")}
 \`\`\`
 `
+    }
+
+    const formattedHelpString = help.replaceAll(/\(예\).*?\([○XO×ox]\)(\d.)|\(예\).*?\([○XO×ox]\)$/g, replacer)
+
     return formattedHelpString
   }
 
