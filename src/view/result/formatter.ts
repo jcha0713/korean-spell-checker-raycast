@@ -74,10 +74,9 @@ ${formattedExamples.join("\r\n")}
 `;
     }
 
-    const formattedHelpString = help.replaceAll(
-      /\(예\).*?\([○XO×ox]\)(\d.)|\(예\).*?\([○XO×ox]\)$|\(예\).*\([○XO×ox]\)/g,
-      replacer
-    );
+    const formattedHelpString = help
+      .replaceAll(/<br\/>/g, "\r\n")
+      .replaceAll(/\(예\).*?\([○XO×ox]\)(\d.)|\(예\).*?\([○XO×ox]\)$|\(예\).*\([○XO×ox]\)/g, replacer);
 
     return formattedHelpString;
   }
