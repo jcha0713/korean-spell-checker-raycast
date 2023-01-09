@@ -2,7 +2,6 @@
   <img width=180 src="https://user-images.githubusercontent.com/29053796/210111931-5f01926c-ea46-4fa9-abde-b2f8787e7875.png">
 </p>
 
-
 # Korean Spell Checker for Raycast
 
 한국어 맞춤법/문법 검사기
@@ -11,7 +10,7 @@ This is a raycast extension with a command to check spelling/grammar errors in y
 
 ## How to install
 
-Install raycast, and visit [extension store](https://www.raycast.com/store) to download it.
+Install raycast, and visit the [extension store](https://raycast.com/jcha0713/korean-spell-checker) to download it.
 
 ## Check Korean Spelling
 
